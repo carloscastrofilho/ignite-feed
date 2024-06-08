@@ -1,0 +1,19 @@
+
+
+.sidebar {
+    background: var(--gray-800);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cover {
+    height: 72px;
+    width: 100%;
+    object-fit: cover; /* não distorce a img, mostra o centro preferencialmente */
+}
+
+.profile {
+    display: flex ;
+    flex-direction : column ;
+    align-items: center;
+}
