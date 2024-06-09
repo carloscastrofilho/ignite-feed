@@ -1,29 +1,80 @@
-import { Post } from "./Post";
+import { Post } from "./components/Post";
+import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
 
-import  estilos from './App.module.css';
+import estilos from './App.module.css';
 import './global.css';
-import { Sidebar } from "./components/Sidebar";
+
+// autor : { avata_url:"", name:"", role:""}
+// publishedAt: Date
+// Content: String
+
+const posts = [
+  {
+    id: 1,
+    author: {
+      avatarUrl: 'https://github.com/diego3g.png',
+      name:"Diego Fernandes",
+      role: 'Educardor'
+    },
+    content: [
+      {type:'paragraph',content:'Fala galeraa 👋'},
+      {type:'paragraph',content:'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
+      {type:'link',content:'jane.design/doctorcare'},
+    ],
+    publishedAt: new Date('2024-06-09 18:00:00'),
+  },
+  {
+    id: 2,
+    author: {
+      avatarUrl: 'https://github.com/maykbrito.png',
+      name:"Mayke Brito",
+      role: 'Educardor'
+    },
+    content: [
+      {type:'paragraph',content:'Fala galeraa 👋'},
+      {type:'paragraph',content:'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
+      {type:'link',content:'jane.design/doctorcare'},
+    ],
+    publishedAt: new Date('2024-06-09 17:00:00'),
+  },
+
+  {
+    id: 3,
+    author: {
+      avatarUrl: 'https://github.com/carloscastrofilho.png',
+      name:"Carlos Filho",
+      role: 'Fatec Educador'
+    },
+    content: [
+      {type:'paragraph',content:'Fala galeraa 👋'},
+      {type:'paragraph',content:'Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀'},
+      {type:'link',content:'jane.design/doctorcare'},
+    ],
+    publishedAt: new Date('2024-06-09 16:00:00'),
+  },
+]
 
 export function App() {
   return (
     <>
-    <Header />
-    <div className={estilos.wrapper}>
-      <Sidebar />
-      <main>
+      <Header />
+      <div className={estilos.wrapper}>
+        <Sidebar />
+        <main>
+          { posts.map( post => {
+            return (
+              <Post 
+                 id={post.id}
+                 author={post.author}
+                 content={post.content}
+                 publishedAt={post.publishedAt}
+            />)
+          })}
 
-    <Post 
-      autor="Carlos" 
-      conteudo="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorem quidem corporis architecto similique sequi! Perspiciatis nisi debitis beatae facere quos, veritatis impedit pariatur natus quasi laudantium vero enim cumque temporibus!"
-    />
-    <Post 
-      autor="Mario Silva" 
-      conteudo="um post para teste"
-    />
-      </main>
-    </div>
-   
+        </main>
+      </div>
+
     </>
   )
 }
