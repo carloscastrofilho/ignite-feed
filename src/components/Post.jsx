@@ -8,7 +8,9 @@ import { useState } from 'react';
 
 export function Post({author, publishedAt, content}){
 
-    const [ comments, setComments] = useState([ 1,2,]);
+    const [ comments, setComments] = useState(['post muito legal']);
+
+    const [newComentario, setNewComentario] = useState('');
     const publishedDateFormatted = format(publishedAt,"d 'de' LLLL 'ás' HH:mm'h'",{
         locale: ptBR,
     })
@@ -17,10 +19,19 @@ export function Post({author, publishedAt, content}){
         addSuffix: true,
     });
 
+    function handleNewComentarioChange(){
+        setNewComentario(event.target.value);
+        
+    }
+
     function handleCreateNewComment() {
         event.preventDefault();
-        setComments([...comments,comments.length+1]);
+        //
+        const newComment = event.target.comment.value ;
+        setComments([...comments, newComentario]);
         //comments.push(3);
+        //event.target.comment.value = '';
+        setNewComentario('');
         
     }
 
@@ -42,9 +53,9 @@ export function Post({author, publishedAt, content}){
             <div className={estilos.content}>
                 {content.map( line =>{
                     if (line.type === "paragraph") {
-                        return <p>{line.content}</p>;
+                        return <p key={line.content}>{line.content}</p>;
                     } else if (line.type === "link"){
-                        return <p> <a href="#"> {line.content} </a></p>;
+                        return <p key={line.content}> <a href="#"> {line.content} </a></p>;
                     }
                 } )}
             </div>
@@ -52,8 +63,11 @@ export function Post({author, publishedAt, content}){
             <form onSubmit={handleCreateNewComment} className={estilos.commentForm}>
                 <strong> Deixe seu  feedback</strong>
                 
-                <textarea 
+                <textarea
+                    name="comment"
                     placeholder='Deixe um comentário'
+                    onChange={handleNewComentarioChange}
+                    value = {newComentario}
                 />
                 <footer>
                     <button type="submit">Publicar</button>
@@ -62,7 +76,7 @@ export function Post({author, publishedAt, content}){
             </form>
             <div className="commentList">
                 {comments.map( comment => {
-                    return <Comment />
+                    return <Comment key={comment} content={comment}/>
                 })}
             </div>
 
