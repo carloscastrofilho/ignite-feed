@@ -1,32 +1,54 @@
-import { format, formatDistance, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { Avatar } from './Avatar';
 import estilos from './Post.module.css';
 import { Comment } from './comment';
 import { ptBR } from 'date-fns/locale/pt-BR';
-import { useState } from 'react';
+import { FormEvent, useState, ChangeEvent, InvalidEvent } from 'react';
 
+interface Author {
+    name: string;
+    role: string;
+    avatarUrl: string;
+}
 
-export function Post({author, publishedAt, content}){
+interface Content {
+    type: 'paragraph' | 'link';
+    content: string ;
+}
+
+export interface PostType{
+    id: number;
+    author: Author;
+    publishedAt: Date;
+    content: Content[];    
+}
+
+interface PostProps {
+    post: PostType;
+}
+
+export function Post({ post }:PostProps){
+
     const [ comments, setComments] = useState(['post muito legal']);
     const [newComentario, setNewComentario] = useState('');
-    const publishedDateFormatted = format(publishedAt,"d 'de' LLLL 'ás' HH:mm'h'",{
+
+    const publishedDateFormatted = format(post.publishedAt,"d 'de' LLLL 'ás' HH:mm'h'",{
         locale: ptBR,
     })
-    const publishedDateRelativeToNow = formatDistanceToNow(publishedAt,{
+
+    const publishedDateRelativeToNow = formatDistanceToNow(post.publishedAt,{
         locale: ptBR,
         addSuffix: true,
     });
 
-    function handleNewComentarioChange(){
+    function handleNewComentarioChange( event: ChangeEvent<HTMLTextAreaElement>)  {
         setNewComentario(event.target.value);
-        event.target.setCustomValidaty('')
-        
+        event.target.setCustomValidity('')        
     }
 
-    function handleCreateNewComment() {
+    function handleCreateNewComment(event:FormEvent) {
         event.preventDefault();
-        //
-        const newComment = event.target.comment.value ;
+        //const newComentario = event.target.value ;
         setComments([...comments, newComentario]);
         //comments.push(3);
         //event.target.comment.value = '';
@@ -34,18 +56,17 @@ export function Post({author, publishedAt, content}){
         
     }
 
-    function deleteCommnet(commentToDeleted){
+    function deleteCommnet(commentToDeleted:string){
         const commnetsWitouDeletedOne = comments.filter ( comment => {
             return comment != commentToDeleted;
         } )
 
         setComments(commnetsWitouDeletedOne);
-        console.log( comments)
 
     }
 
-    function handleNewCommentInvalid(){
-        event.target.setCustomValidaty('esse campo é obrigatório!')
+    function handleNewCommentInvalid(event:InvalidEvent<HTMLTextAreaElement>){
+        event.target.setCustomValidity('esse campo é obrigatório!')
     }
     const isNewCommentEmpty = newComentario.length == 0 ;
 
@@ -53,19 +74,19 @@ export function Post({author, publishedAt, content}){
         <article className={estilos.post}>
             <header>
                 <div className={estilos.autor}>                    
-                    <Avatar src={author.avatarUrl} />
+                    <Avatar src={post.author.avatarUrl} />
                     <div className={estilos.autorInfo}>
-                        <strong> {author.name}</strong>
-                        <span> {author.role}</span>
+                        <strong> {post.author.name}</strong>
+                        <span> {post.author.role}</span>
                     </div>
                 </div>
 
-                <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}> 
+                <time title={publishedDateFormatted} dateTime={post.publishedAt.toISOString()}> 
                     {publishedDateRelativeToNow}
                 </time>
             </header>
             <div className={estilos.content}>
-                {content.map( line =>{
+                {post.content.map( line =>{
                     if (line.type === "paragraph") {
                         return <p key={line.content}>{line.content}</p>;
                     } else if (line.type === "link"){
@@ -102,8 +123,6 @@ export function Post({author, publishedAt, content}){
                         onDeleteComment={deleteCommnet}/>
                 })}
             </div>
-
-        
         </article>
     );
 }

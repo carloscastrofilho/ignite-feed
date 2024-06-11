@@ -1,15 +1,15 @@
-import { Post } from "./components/Post";
+import { Post , PostType } from "./components/Post";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
 
 import estilos from './App.module.css';
-import './global.css';
+import './global.css';''
 
 // autor : { avata_url:"", name:"", role:""}
 // publishedAt: Date
 // Content: String
 
-const posts = [
+const posts:PostType[] = [
   {
     id: 1,
     author: {
@@ -66,10 +66,7 @@ export function App() {
             return (
               <Post 
                  key={post.id}
-                 id={post.id}
-                 author={post.author}
-                 content={post.content}
-                 publishedAt={post.publishedAt}
+                 post={post}
             />)
           })}
 
